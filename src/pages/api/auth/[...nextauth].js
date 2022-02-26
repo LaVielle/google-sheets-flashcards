@@ -60,15 +60,14 @@ export default NextAuth({
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      authorization:
-        'https://accounts.google.com/o/oauth2/v2/auth?' +
-        new URLSearchParams({
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code',
-        }),
-      scope:
-        'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/youtube.readonly',
+      authorization: {
+        url: 'https://accounts.google.com/o/oauth2/v2/auth?prompt=consent&access_type=offline&response_type=code',
+        params: {
+          // TODO: this scope is probably too permissive
+          scope:
+            'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/spreadsheets',
+        },
+      },
     }),
   ],
   pages: {
@@ -78,7 +77,7 @@ export default NextAuth({
   jwt: {
     encryption: true,
   },
-  secret: process.env.GFS_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user, account }) {
       // Initial sign in
