@@ -1,20 +1,38 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
+import { useEffect } from 'react';
 
 import { ProfileCard } from '@/components/ProfileCard';
 import Seo from '@/components/Seo';
 
 export default function HomePage() {
-  const { data: session } = useSession();
-  console.log({ session });
+  const session = useSession();
+
+  useEffect(() => {
+    if (session.data?.accessToken) {
+      const getData = async () => {
+        try {
+          const response = await fetch('/api/getSheetsData');
+          const data = await response.json();
+
+          console.log('data', data);
+        } catch (e) {
+          console.log('getData error', e);
+        }
+      };
+
+      getData().then();
+    }
+  }, [session.data?.accessToken]);
+
   return (
     <>
       <Seo templateTitle='Home' />
 
       <div className='flex flex-col p-32'>
-        {session ? (
+        {session.status === 'authenticated' ? (
           <>
-            {session.user && <ProfileCard user={session.user} />}
+            {session.data?.user && <ProfileCard user={session.data.user} />}
 
             <div className='h-5' />
 
