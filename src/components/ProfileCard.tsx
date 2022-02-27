@@ -20,7 +20,7 @@ export const ProfileCard: React.FC<Props> = ({ user }) => {
         )}
       </div>
       <div>
-        <p className='text-3xl font-semibold tracking-wide text-gray-700'>
+        <p className='text-xl font-semibold tracking-wide text-gray-700 md:text-2xl lg:text-3xl '>
           {user.name}
         </p>
         <p className='text-gray-500'>{user.email}</p>

@@ -38,7 +38,7 @@ export default function HomePage() {
     <>
       <Seo templateTitle='Home' />
 
-      <div className='flex flex-col p-32'>
+      <div className='flex flex-col p-4 md:p-16 lg:p-32'>
         {session.status === 'authenticated' ? (
           <>
             {session.data?.user && <ProfileCard user={session.data.user} />}
