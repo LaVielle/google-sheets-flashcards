@@ -1,12 +1,19 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ProfileCard } from '@/components/ProfileCard';
 import Seo from '@/components/Seo';
+import { TranslationCard } from '@/components/TranslationCard';
+
+import { isLastIndexInArray } from '@/utils';
 
 export default function HomePage() {
   const session = useSession();
+
+  const [translations, setTranslations] = useState<Record<string, string>[]>(
+    []
+  );
 
   useEffect(() => {
     if (session.data?.accessToken) {
@@ -14,6 +21,8 @@ export default function HomePage() {
         try {
           const response = await fetch('/api/getSheetsData');
           const data = await response.json();
+
+          setTranslations(data.data);
 
           console.log('data', data);
         } catch (e) {
@@ -43,6 +52,28 @@ export default function HomePage() {
             >
               Sign out
             </button>
+
+            <div className='h-5' />
+
+            {translations.map((translation, index) => {
+              const [languageAName, languageBName] = Object.keys(translation);
+              const languageAValue = translation[languageAName];
+              const languageBValue = translation[languageBName];
+
+              return (
+                <React.Fragment key={`translation-${index}`}>
+                  <TranslationCard
+                    languageAName={languageAName}
+                    languageBName={languageBName}
+                    languageAValue={languageAValue}
+                    languageBValue={languageBValue}
+                  />
+                  {!isLastIndexInArray(index, translations) && (
+                    <div className='h-5' />
+                  )}
+                </React.Fragment>
+              );
+            })}
           </>
         ) : (
           <button

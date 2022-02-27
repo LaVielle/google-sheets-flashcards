@@ -5,9 +5,10 @@ import React from 'react';
 type Props = {
   user: NonNullable<DefaultSession['user']>;
 };
+
 export const ProfileCard: React.FC<Props> = ({ user }) => {
   return (
-    <div className='mx-auto flex items-center rounded-lg bg-gray-50 p-4 shadow'>
+    <div className='mx-auto flex items-center rounded-lg border-2 border-gray-200 bg-gray-50 p-4 shadow'>
       <div className='mr-5 h-20 w-20 overflow-hidden rounded-full'>
         {user.image && (
           <Image
